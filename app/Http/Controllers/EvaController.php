@@ -115,7 +115,7 @@ class EvaController extends Controller {
         if (!$isError) {
             try {
                 if (isset($name)) {
-                    $result     = Hitungeva::where('evaluate_at', $date)->where('name', $name)->get();
+                    $result     = Hitungeva::where('name', $name)->get();
                 } else {
                     $result     = Hitungeva::where('evaluate_at', $date)->get();
                 }
