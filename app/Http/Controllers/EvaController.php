@@ -107,11 +107,10 @@ class EvaController extends Controller {
         $date   = date('y-m-j');
         $dataev = Hitungeva::where('evaluate_at', $date)->first();
 
-        $datelist=Hitungeva::select('evaluate_at');
+        $datelist   = Hitungeva::select('evaluate_at');
+        $project    = Inputproject::select('name', 'budget_at_completion', 'plan_at_completion')->get();
 
-        $project=Inputproject::select('name', 'budget_at_completion', 'plan_at_completion')->get();
-
-        $graphic=Hitungeva::select('evaluate_at', 'planned_value', 'earned_value', 'actual_cost')->get();
+        $graphic    = Hitungeva::select('evaluate_at', 'planned_value', 'earned_value', 'actual_cost')->get();
 
         $result = array(
             'data' => $dataev,

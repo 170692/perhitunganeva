@@ -6,6 +6,15 @@
 	<script type="text/javascript" src="{{URL::asset('public/jquery-3.1.0.min.js')}}"></script>
 	<script>
 	$(document).ready(function() {
+		//$.getJSON("earnedvalueanalysis", function(response)){
+		//	var th = '';
+		//	$.each(response.project, function(index, value) {
+		//	    th += '<th value="' + value.name + '" text="' + value.name + '" />';
+		//	});
+
+		//	$('#list').append(th);
+		//}
+
         $('form').on('submit', function(event) {
 			event.stopPropagation(); // Stop stuff happening
 			event.preventDefault(); // Totally stop stuff happening
@@ -135,12 +144,8 @@
 						<table id="list">
 							<tr>
 								<th>Nama Proyek</th>
-								<th>Tanggal Hitung Terakhir</th>
 							</tr>
-							<tr>
-								<th></th>
-								<th></th>
-							</tr>
+
 						</table>
 					</div>
 				</div>
@@ -160,11 +165,11 @@
 </html>
 
 <script>
-$(window).on('load', function() {
-	$.getJSON( "earnedvalueanalysis", function(response) {
-		$('#project').text(response.projectlist.name);
-
-	});
-});
+//$(window).on('load', function() {
+//	$.getJSON( "earnedvalueanalysis", function(response) {
+//		$('#project').text(response.projectlist.name);
+//
+//	});
+//});
 
 </script>

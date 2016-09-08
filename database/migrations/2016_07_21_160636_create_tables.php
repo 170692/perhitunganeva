@@ -15,10 +15,10 @@ class CreateTables extends Migration
         //
         Schema::create('dataeva', function(Blueprint $table){
           // $table->date('created_at');
-        //   $table->increments('id');
+          $table->increments('id');
           $table->integer('eva_id');
           $table->date('evaluate_at');
-          $table->primary('evaluate_at');
+        //   $table->primary('evaluate_at');
           $table->integer('planned_value');
           $table->integer('earned_value');
           $table->integer('actual_cost');
