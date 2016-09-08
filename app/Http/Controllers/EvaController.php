@@ -160,58 +160,56 @@ class EvaController extends Controller {
 
         if (!$isError) {
             try {
-                foreach ($files as $key => $value) {
-                    if ($value->getClientOriginalExtension() == 'xml') {
-                        $xml = simplexml_load_file($value);
+                if ($files->getClientOriginalExtension() == 'xml') {
+                    $xml = simplexml_load_file($files);
 
-                        $n = $xml->Name;
-                        $bcws = $xml->Tasks->Task->BCWS;
-                        $bcwp = $xml->Tasks->Task->BCWP;
-                        $acwp = $xml->Tasks->Task->ACWP;
-                        $cost = $xml->Tasks->Task->Baseline->Cost;
-                        $duration = $xml->Tasks->Task->Baseline->Duration;
+                    $n = $xml->Name;
+                    $bcws = $xml->Tasks->Task->BCWS;
+                    $bcwp = $xml->Tasks->Task->BCWP;
+                    $acwp = $xml->Tasks->Task->ACWP;
+                    $cost = $xml->Tasks->Task->Baseline->Cost;
+                    $duration = $xml->Tasks->Task->Baseline->Duration;
 
-                        $name = substr($n, 0, strpos($n, ".xml"));
-                        $bac = substr($cost, 0, -2);
-                        $pac = substr($duration, 2, strpos($duration, "H")-2);
+                    $name = substr($n, 0, strpos($n, ".xml"));
+                    $bac = substr($cost, 0, -2);
+                    $pac = substr($duration, 2, strpos($duration, "H")-2);
 
-                        $date = date('y-m-j');
-                        $pv = substr($bcws, 0, strpos($bcws, "00.00"));
-                        $ev = substr($bcwp, 0, strpos($bcwp, "00.00"));
-                        $ac = substr($acwp, 0, strpos($acwp, "00.00"));
-                        $cv = $ev - $ac;
-                        $sv = $ev - $pv;
-                        $cpi = $ev/$ac;
-                        $spi = $ev/$pv;
-                        $tac = $pac/$spi;
-                        $dac = $pac - $tac;
-                        $tcpi = ($bac - $ev)/($bac - $ac);
-                        $eac = $bac/$cpi;
-                        $etc = $eac - $ac;
-                        $vac = $bac - $eac;
+                    $date = date('y-m-j');
+                    $pv = substr($bcws, 0, strpos($bcws, "00.00"));
+                    $ev = substr($bcwp, 0, strpos($bcwp, "00.00"));
+                    $ac = substr($acwp, 0, strpos($acwp, "00.00"));
+                    $cv = $ev - $ac;
+                    $sv = $ev - $pv;
+                    $cpi = $ev/$ac;
+                    $spi = $ev/$pv;
+                    $tac = $pac/$spi;
+                    $dac = $pac - $tac;
+                    $tcpi = ($bac - $ev)/($bac - $ac);
+                    $eac = $bac/$cpi;
+                    $etc = $eac - $ac;
+                    $vac = $bac - $eac;
 
-                        // var_dump($n);
+                    // var_dump($n);
 
-                        Hitungeva::create(array(
-                            'CPI'                   => $cpi,
-                            'SPI'                   => $spi,
-                            'EAC'                   => $eac,
-                            'ETC'                   => $etc,
-                            'VAC'                   => $vac,
-                            'name'                  => $name,
-                            'TCPI'                  => $tcpi,
-                            'evaluate_at'           => $date,
-                            'actual_cost'           => $ac,
-                            'earned_value'          => $ev,
-                            'planned_value'         => $pv,
-                            'cost_variance'         => $cv,
-                            'schedule_variance'     => $sv,
-                            'time_at_completion'    => $tac,
-                            'plan_at_completion'    => $pac,
-                            'delay_at_completion'   => $dac,
-                            'budget_at_completion'  => $bac,
-                        ));
-                    }
+                    Hitungeva::create(array(
+                        'CPI'                   => $cpi,
+                        'SPI'                   => $spi,
+                        'EAC'                   => $eac,
+                        'ETC'                   => $etc,
+                        'VAC'                   => $vac,
+                        'name'                  => $name,
+                        'TCPI'                  => $tcpi,
+                        'evaluate_at'           => $date,
+                        'actual_cost'           => $ac,
+                        'earned_value'          => $ev,
+                        'planned_value'         => $pv,
+                        'cost_variance'         => $cv,
+                        'schedule_variance'     => $sv,
+                        'time_at_completion'    => $tac,
+                        'plan_at_completion'    => $pac,
+                        'delay_at_completion'   => $dac,
+                        'budget_at_completion'  => $bac,
+                    ));
                 }
             } catch (\Exception $e) {
                 $response   = "FAILED";
