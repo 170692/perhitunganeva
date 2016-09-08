@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>tic tac toe</title>
+	<title>Perhitungan EVA</title>
 	<script type="text/javascript" src="{{URL::asset('public/jquery-3.1.0.min.js')}}"></script>
 	<script type="text/javascript" src="{{URL::asset('public/canvasjs.min.js')}}"></script>
 	<script type="text/javascript" src="{{URL::asset('public/lodash.min.js')}}"></script>

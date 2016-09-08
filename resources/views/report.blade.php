@@ -2,18 +2,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>tic tac toe</title>
+	<title>Perhitungan EVA</title>
 	<script type="text/javascript" src="{{URL::asset('public/jquery-3.1.0.min.js')}}"></script>
 	<script>
 	$(document).ready(function() {
 		//$.getJSON("earnedvalueanalysis", function(response)){
-		//	var th = '';
+		//	var tr = '';
 		//	$.each(response.project, function(index, value) {
-		//	    th += '<th value="' + value.name + '" text="' + value.name + '" />';
+		//	    tr += '<tr value="' + value.name + '" text="' + value.name + '" />';
 		//	});
 
-		//	$('#list').append(th);
+		//	$('#list').append(tr);
 		//}
+
+	//	   var table = document.getElementById("list");
+	//	   var rows = table.getElementsByTagName("tr");
+	//	   for (i = 0; i < rows.length; i++) {
+	//	       var currentRow = table.rows[i];
+	//	       rows[i].onclick = function(){rowHandlers();};
+//		       currentRow.onclick = createClickHandler(currentRow);
+//		   }
+
+//		function addRowHandlers() {
+//		}
+
 
         $('form').on('submit', function(event) {
 			event.stopPropagation(); // Stop stuff happening
@@ -145,7 +157,6 @@
 							<tr>
 								<th>Nama Proyek</th>
 							</tr>
-
 						</table>
 					</div>
 				</div>
