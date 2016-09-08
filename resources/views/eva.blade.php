@@ -129,7 +129,9 @@
 		width:100%;
 	}
 	#graphic{
-
+		margin-left: 10%;
+		width: 80%;
+		float: left;
 	}
 	#report{
 
@@ -152,7 +154,7 @@
 		<div id="flex-countainer">
 			<header>
 				<div id="logo">
-					<img src="{{URL::asset('image/logoEVA.png')}}" alt="" />
+					<img src="{{URL::asset('public/image/logoEVA.png')}}" alt="" />
 					<!--<div id="menu">
 						<ul>
 							<li>Home</li>
@@ -170,7 +172,7 @@
 				</div>
 				<div id="name">
 					<div id="projectname">
-						Project Name
+						<output id="project" name="project"></output>
 					</div>
 				</div>
 			</header>
@@ -197,10 +199,10 @@
 					Tanggal Perhitungan:
 					<div id="pilihdate">
 						<form id="tanggal">
-						  <select name="tanggalperhitungan">
-
+						  <select class="tanggalperhitungan">
+							  <!-- <option></option> -->
 						  </select>
-						  <input type="submit">
+						  <input type="submit" id="inputtanggal">
 						</form>
 					</div>
 				</div>
@@ -217,10 +219,10 @@
 				</div>
 				<div id="base-data-dua">
 					<div id="budget-at-completion">
-						Budget at Completion: Rp <output id="bac" name="ac"></output>
+						Budget at Completion: Rp <output id="bac" name="bac"></output>
 					</div>
 					<div id="plan-at-completion">
-						Plan at Completion: <output id="pac" name="ac"></output> hours
+						Plan at Completion: <output id="pac" name="pac"></output> hours
 					</div>
 				</div>
 				<div id="graphic">
@@ -267,15 +269,53 @@
 <script>
 
 $(window).on('load', function() {
-	$.getJSON( "earnedvalueanalysis", function(response) {
-		// console.log(response);
+	$('#inputtanggal').on('click', function(){
+		// console.log($('.tanggalperhitungan').val());
+		$.getJSON("earnedvalueanalysis/bydate?tanggal=" + $('.tanggalperhitungan').val(), function(response){
 
-	//	var options = '';
-	//	$.each(response.datelist, function(index, value) {
-	//	    options += '<option value="' + value.evaluate_at + '" text="' + value.evaluate_at + '" />';
-	//	});
-//
-//		$('#tanggalperhitungan').append(options);
+			$('#pv').text(response.data.planned_value);
+			$('#ev').text(response.data.earned_value);
+			$('#ac').text(response.data.actual_cost);
+			$('#project').text(response.data.name);
+			$('#bac').text(response.data.budget_at_completion);
+			$('#pac').text(response.data.plan_at_completion);
+
+
+			if (response.data.cost_variance>=1){
+		        $('#cv').text("The Project is in budget.");
+		    }else{
+		        $('#cv').text("The Project is out of budget.");
+		    };
+
+		    if (response.data.schedule_variance=1){
+		        $('#sv').text("The Project is in schedule.");
+		    }else if (response.data.cost_variance>1){
+		        $('#sv').text("The Project is ahead of schedule.");
+		    }else{
+		        $('#sv').text("The Project is behind schedule.");
+		    };
+
+			$('#cpi').text(response.data.CPI);
+
+		    $('#spi').text(response.data.SPI);
+
+		    $('#tac').text(response.data.time_at_completion);
+
+		    $('#dac').text(response.data.delay_at_completion);
+
+		    $('#tcpi').text(response.data.TCPI);
+
+		    $('#eac').text(response.data.EAC);
+
+		    $('#etc').text(response.data.ETC);
+
+		    $('#vac').text(response.data.VAC);
+		});
+		return false;
+	});
+
+	$.getJSON( "earnedvalueanalysis/last", function(response) {
+		console.log(response);
 
 		var chartdata	= [
 			{ type : 'line', name: "Actual Cost", showInLegend: true, dataPoints : [] },
@@ -285,9 +325,9 @@ $(window).on('load', function() {
 
 		_.forEach(response.graphic, function(value, key) {
 			// console.log(chartdata[0]);
-			chartdata[0].dataPoints.push({ x : new Date(value.evaluate_at), y : value.actual_cost });
-			chartdata[1].dataPoints.push({ x : new Date(value.evaluate_at), y : value.earned_value });
-			chartdata[2].dataPoints.push({ x : new Date(value.evaluate_at), y : value.planned_value });
+			chartdata[0].dataPoints.push({ x : new Date(value.created_at), y : value.actual_cost });
+			chartdata[1].dataPoints.push({ x : new Date(value.created_at), y : value.earned_value });
+			chartdata[2].dataPoints.push({ x : new Date(value.created_at), y : value.planned_value });
 		});
 
 		var chart = new CanvasJS.Chart("chartContainer", {
@@ -301,14 +341,22 @@ $(window).on('load', function() {
 		var pv = response.graphic.planned_value;
 		var ev = response.graphic.earned_value;
 		var ac = response.graphic.actual_cost;
-		var evaluate_at = response.graphic.evaluate_at;
+		var created_at = response.graphic.created_at;
+
+		var options = '';
+		_.forEach(response.datelist, function(value, key) {
+		    options += '<option value="' + value.created_at + '">' + value.created_at + '</option>';
+		});
+		$('.tanggalperhitungan').append(options);
+
 
 		// $('#today').text(response.data.evaluate_at);
 		$('#pv').text(response.data.planned_value);
 		$('#ev').text(response.data.earned_value);
 		$('#ac').text(response.data.actual_cost);
-		$('#bac').text(response.projectlist.budget_at_completion);
-		$('#pac').text(response.projectlist.plan_at_completion);
+		$('#project').text(response.data.name);
+		$('#bac').text(response.data.budget_at_completion);
+		$('#pac').text(response.data.plan_at_completion);
 
 
 		if (response.data.cost_variance>=1){

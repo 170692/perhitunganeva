@@ -6,14 +6,14 @@
 	<script type="text/javascript" src="{{URL::asset('public/jquery-3.1.0.min.js')}}"></script>
 	<script>
 	$(document).ready(function() {
-		//$.getJSON("earnedvalueanalysis", function(response)){
-		//	var tr = '';
-		//	$.each(response.project, function(index, value) {
-		//	    tr += '<tr value="' + value.name + '" text="' + value.name + '" />';
-		//	});
-
-		//	$('#list').append(tr);
-		//}
+	// 	$.getJSON("earnedvalueanalysis", function(response)){
+	// 		var tr = '';
+	// 		$.each(response.project, function(index, value) {
+	// 		    tr += '<tr value="' + value.name + '" text="' + value.name + '" />';
+	// 		});
+	//
+	// 		$('#list').append(tr);
+	// 	}
 
 	//	   var table = document.getElementById("list");
 	//	   var rows = table.getElementsByTagName("tr");
@@ -32,10 +32,10 @@
 			event.preventDefault(); // Totally stop stuff happening
 
 			var data = new FormData();
-			data.append('xml', $('#xml')[0].files[0]);
+			data.append('files', $('#xml')[0].files[0]);
 
 			$.ajax({
-				url: 'earnedvalueanalysis',
+				url: 'uploadXML',
 				type: 'POST',
 				data: data,
 				cache: false,
@@ -46,7 +46,7 @@
 				// {
 				// 	alert('success');
 				// },
-				error: function(jqXHR, textStatus, errorThrown)
+				success: function(jqXHR, textStatus, errorThrown)
 				{
 					window.location	= 'eva';
 				}

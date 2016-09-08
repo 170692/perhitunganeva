@@ -230,18 +230,28 @@ class EvaController extends Controller {
 
     public function get(Request $request){
         $date   = date('y-m-j');
-        $dataev = Hitungeva::where('evaluate_at', $date)->first();
+        $dataev = Hitungeva::where('evaluate_at', $date)->orderBy('created_at', 'desc')->first();
 
-        $datelist   = Hitungeva::select('evaluate_at');
-        $project    = Inputproject::select('name', 'budget_at_completion', 'plan_at_completion')->get();
+        $datelist   = Hitungeva::select('created_at')->get();
 
-        $graphic    = Hitungeva::select('evaluate_at', 'planned_value', 'earned_value', 'actual_cost')->get();
+
+        $graphic    = Hitungeva::select('created_at', 'planned_value', 'earned_value', 'actual_cost')->get();
 
         $result = array(
             'data' => $dataev,
             'datelist' => $datelist,
-            'projectlist'=> $project,
             'graphic' => $graphic,
+        );
+
+        return response()->json($result, 200)->header('access-control-allow-origin', '*');
+    }
+
+    public function push(Request $request){
+        $date   = $request->tanggal;
+        $dataev = Hitungeva::where('created_at', $date)->first();
+
+        $result = array(
+            'data' => $dataev,
         );
 
         return response()->json($result, 200)->header('access-control-allow-origin', '*');
