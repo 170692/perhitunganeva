@@ -99,8 +99,125 @@ class EvaController extends Controller {
 
     }
 
+    public function index(Request $request) {
+        $returnData         = array();
+        $response           = "OK";
+        $statusCode         = 200;
+        $result             = null;
+        $message            = "Mengambil semua data untuk tanggal ".date('y-m-j')." sukses.";
+        $isError            = FALSE;
+        $missingParams      = null;
+
+        $input              = $request->all();
+
+        if (!$isError) {
+            try {
+                $result     = Hitungeva::where('evaluate_at', date('y-m-j'))->get();
+
+            } catch (\Exception $e) {
+                $response   = "FAILED";
+                $statusCode = 400;
+                $message    = $e->getMessage()." on line: " . $e->getLine();
+            }
+        }
+
+        $returnData = array(
+            'response'      => $response,
+            'status_code'   => $statusCode,
+            'message'       => $message,
+            'result'        => $result
+        );
+
+        return  response()->json($returnData, $statusCode)->header('access-control-allow-origin', '*');
+    }
+
     public function uploadXML(Request $request) {
-        var_dump('asdk askjdk ajsdkj as');
+        $returnData         = array();
+        $response           = "OK";
+        $statusCode         = 200;
+        $result             = null;
+        $message            = "Mengubah data dari xml ke dalam bentuk array sukses.";
+        $isError            = FALSE;
+        $missingParams      = null;
+
+        $input              = $request->all();
+        $files              = ($request->hasFile('files')) ? $request->file('files') : null;
+
+        if (!isset($files)) { $missingParams[] = "files"; }
+
+        if (isset($missingParams)) {
+            $isError    = TRUE;
+            $response   = "FAILED";
+            $statusCode = 400;
+            $message    = "Missing parameters : {".implode(', ', $missingParams)."}";
+        }
+
+        if (!$isError) {
+            try {
+                foreach ($files as $key => $value) {
+                    if ($value->getClientOriginalExtension() == 'xml') {
+                        $xml = simplexml_load_file($value);
+
+                        $n = $xml->Name;
+                        $bcws = $xml->Tasks->Task->BCWS;
+                        $bcwp = $xml->Tasks->Task->BCWP;
+                        $acwp = $xml->Tasks->Task->ACWP;
+                        $cost = $xml->Tasks->Task->Baseline->Cost;
+                        $duration = $xml->Tasks->Task->Baseline->Duration;
+
+                        $name = substr($n, 0, strpos($n, ".xml"));
+                        $bac = substr($cost, 0, -2);
+                        $pac = substr($duration, 2, strpos($duration, "H")-2);
+
+                        $date = date('y-m-j');
+                        $pv = substr($bcws, 0, strpos($bcws, "00.00"));
+                        $ev = substr($bcwp, 0, strpos($bcwp, "00.00"));
+                        $ac = substr($acwp, 0, strpos($acwp, "00.00"));
+                        $cv = $ev - $ac;
+                        $sv = $ev - $pv;
+                        $cpi = $ev/$ac;
+                        $spi = $ev/$pv;
+                        $tac = $pac/$spi;
+                        $dac = $pac - $tac;
+                        $tcpi = ($bac - $ev)/($bac - $ac);
+                        $eac = $bac/$cpi;
+                        $etc = $eac - $ac;
+                        $vac = $bac - $eac;
+
+                        Hitungeva::create(array(
+                            'evaluate_at'           => $date,
+                            'planned_value'         => $pv,
+                            'earned_value'          => $ev,
+                            'actual_cost'           => $ac,
+                            'schedule_variance'     => $sv,
+                            'cost_variance'         => $cv,
+                            'CPI'                   => $cpi,
+                            'SPI'                   => $spi,
+                            'time_at_completion'    => $tac,
+                            'delay_at_completion'   => $dac,
+                            'TCPI'                  => $tcpi,
+                            'EAC'                   => $eac,
+                            'ETC'                   => $etc,
+                            'VAC'                   => $vac,
+                            'eva_id'                => null,
+                        ));
+                    }
+                }
+            } catch (\Exception $e) {
+                $response   = "FAILED";
+                $statusCode = 400;
+                $message    = $e->getMessage()." on line: " . $e->getLine();
+            }
+        }
+
+        $returnData = array(
+            'response'      => $response,
+            'status_code'   => $statusCode,
+            'message'       => $message,
+            'result'        => $result
+        );
+
+        return  response()->json($returnData, $statusCode)->header('access-control-allow-origin', '*');
     }
 
     public function get(Request $request){
