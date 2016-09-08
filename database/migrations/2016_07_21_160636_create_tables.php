@@ -16,7 +16,7 @@ class CreateTables extends Migration
         Schema::create('dataeva', function(Blueprint $table){
           // $table->date('created_at');
           $table->increments('id');
-          $table->integer('eva_id')->nullable();
+        //   $table->integer('eva_id')->nullable();
           $table->date('evaluate_at');
         //   $table->primary('evaluate_at');
           $table->integer('planned_value');
@@ -32,6 +32,9 @@ class CreateTables extends Migration
           $table->integer('EAC');
           $table->integer('ETC');
           $table->integer('VAC');
+          $table->string('name');
+          $table->double('budget_at_completion');
+          $table->integer('plan_at_completion');
           $table->timestamps();
         });
 

@@ -109,10 +109,16 @@ class EvaController extends Controller {
         $missingParams      = null;
 
         $input              = $request->all();
+        $date               = (isset($input['date']))   ? $input['date']    : date('y-m-j');
+        $name               = (isset($input['name']))   ? $input['name']    : null;
 
         if (!$isError) {
             try {
-                $result     = Hitungeva::where('evaluate_at', date('y-m-j'))->get();
+                if (isset($name)) {
+                    $result     = Hitungeva::where('evaluate_at', $date)->where('name', $name)->get();
+                } else {
+                    $result     = Hitungeva::where('evaluate_at', $date)->get();
+                }
 
             } catch (\Exception $e) {
                 $response   = "FAILED";
@@ -184,22 +190,26 @@ class EvaController extends Controller {
                         $etc = $eac - $ac;
                         $vac = $bac - $eac;
 
+                        // var_dump($n);
+
                         Hitungeva::create(array(
-                            'evaluate_at'           => $date,
-                            'planned_value'         => $pv,
-                            'earned_value'          => $ev,
-                            'actual_cost'           => $ac,
-                            'schedule_variance'     => $sv,
-                            'cost_variance'         => $cv,
                             'CPI'                   => $cpi,
                             'SPI'                   => $spi,
-                            'time_at_completion'    => $tac,
-                            'delay_at_completion'   => $dac,
-                            'TCPI'                  => $tcpi,
                             'EAC'                   => $eac,
                             'ETC'                   => $etc,
                             'VAC'                   => $vac,
-                            'eva_id'                => null,
+                            'name'                  => $name,
+                            'TCPI'                  => $tcpi,
+                            'evaluate_at'           => $date,
+                            'actual_cost'           => $ac,
+                            'earned_value'          => $ev,
+                            'planned_value'         => $pv,
+                            'cost_variance'         => $cv,
+                            'schedule_variance'     => $sv,
+                            'time_at_completion'    => $tac,
+                            'plan_at_completion'    => $pac,
+                            'delay_at_completion'   => $dac,
+                            'budget_at_completion'  => $bac,
                         ));
                     }
                 }
