@@ -257,4 +257,38 @@ class EvaController extends Controller {
         return response()->json($result, 200)->header('access-control-allow-origin', '*');
     }
 
+    public function getProjectName(Request $request) {
+        $returnData         = array();
+        $response           = "OK";
+        $statusCode         = 200;
+        $result             = null;
+        $message            = "Mengambil semua nama project sukses.";
+        $isError            = FALSE;
+        $missingParams      = null;
+
+        $input              = $request->all();
+
+        if (!$isError) {
+            try {
+                $projects   = array_map(function($o) {
+                    return $o['name'];
+                }, Hitungeva::get(array('name'))->toArray());
+
+                $result     = array_values(array_unique($projects));
+            } catch (\Exception $e) {
+                $response   = "FAILED";
+                $statusCode = 400;
+                $message    = $e->getMessage()." on line: " . $e->getLine();
+            }
+        }
+
+        $returnData = array(
+            'response'      => $response,
+            'status_code'   => $statusCode,
+            'message'       => $message,
+            'result'        => $result
+        );
+
+        return  response()->json($returnData, $statusCode)->header('access-control-allow-origin', '*');
+    }
 }

@@ -18,5 +18,6 @@ Route::post('earnedvalueanalysis', 'EvaController@debug');
 Route::get('earnedvalueanalysis', 'EvaController@index');
 Route::get('earnedvalueanalysis/last', 'EvaController@get');
 Route::get('earnedvalueanalysis/bydate', 'EvaController@push');
+Route::get('projectname', 'EvaController@getProjectName');
 Route::post('uploadXML', 'EvaController@uploadXML');
 // Route::get('earnedvalueanalysis', 'EvaController@graphic');
