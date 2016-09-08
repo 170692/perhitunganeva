@@ -99,9 +99,13 @@ class EvaController extends Controller {
 
     }
 
+    public function uploadXML(Request $request) {
+        var_dump('asdk askjdk ajsdkj as');
+    }
+
     public function get(Request $request){
-        $date=date('y-m-j');
-        $dataev=Hitungeva::where('evaluate_at', $date)->first();
+        $date   = date('y-m-j');
+        $dataev = Hitungeva::where('evaluate_at', $date)->first();
 
         $datelist=Hitungeva::select('evaluate_at');
 

@@ -13,9 +13,10 @@ class CreateTables extends Migration
     public function up()
     {
         //
-        Schema::create('dataeva',function(Blueprint $table){
+        Schema::create('dataeva', function(Blueprint $table){
           // $table->date('created_at');
-          $table->increments('eva_id');
+        //   $table->increments('id');
+          $table->integer('eva_id');
           $table->date('evaluate_at');
           $table->primary('evaluate_at');
           $table->integer('planned_value');
@@ -34,10 +35,10 @@ class CreateTables extends Migration
           $table->timestamps();
         });
 
-        Schema::table('dataeva', function($table){
-            $table->('eva_id')->unsigned();
-            $table->foreign('eva_id')->references('id')->on('dataproject');
-        });
+        // Schema::table('dataeva', function($table){
+        //     $table->('eva_id')->unsigned();
+        //     $table->foreign('eva_id')->references('id')->on('dataproject');
+        // });
     }
 
     /**

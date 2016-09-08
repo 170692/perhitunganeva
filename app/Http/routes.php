@@ -16,4 +16,5 @@ Route::get('/eva', function () { return view('eva'); });
 
 Route::post('earnedvalueanalysis', 'EvaController@debug');
 Route::get('earnedvalueanalysis', 'EvaController@get');
+Route::post('uploadXML', 'EvaController@uploadXML');
 // Route::get('earnedvalueanalysis', 'EvaController@graphic');

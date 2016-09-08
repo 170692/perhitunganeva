@@ -122,7 +122,7 @@
 	<div id="flex-countainer">
 		<header>
 			<div id="logo">
-				<img src="..\eva\public\image\logoEVA.png" alt="" />
+				<img src="{{URL::asset('public/image/logoEVA.png')}}" alt="" />
 			</div>
 		</header>
 		<div id="content-wrapper">
