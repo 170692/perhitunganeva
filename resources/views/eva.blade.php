@@ -197,9 +197,8 @@
 					Tanggal Perhitungan:
 					<div id="pilihdate">
 						<form id="tanggal">
-						  <select name="tanggal perhitungan">
-						    <option value="first">First</option>
-							<option value="second">Second</option>
+						  <select name="tanggalperhitungan">
+
 						  </select>
 						  <input type="submit">
 						</form>
@@ -271,6 +270,13 @@ $(window).on('load', function() {
 	$.getJSON( "earnedvalueanalysis", function(response) {
 		// console.log(response);
 
+	//	var options = '';
+	//	$.each(response.datelist, function(index, value) {
+	//	    options += '<option value="' + value.evaluate_at + '" text="' + value.evaluate_at + '" />';
+	//	});
+//
+//		$('#tanggalperhitungan').append(options);
+
 		var chartdata	= [
 			{ type : 'line', name: "Actual Cost", showInLegend: true, dataPoints : [] },
 			{ type : 'line', name: "Earned Value", showInLegend: true, dataPoints : [] },
@@ -334,6 +340,7 @@ $(window).on('load', function() {
 	    $('#etc').text(response.data.ETC);
 
 	    $('#vac').text(response.data.VAC);
+
 
 	});
 });
